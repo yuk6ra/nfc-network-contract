@@ -6,8 +6,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
 
-contract OwnerBadge is ERC721, Ownable, ReentrancyGuard {
-
+contract OwnerBadgeMock is ERC721, Ownable, ReentrancyGuard {
     uint256 public totalSupply;
 
     bytes32 public merkleRoot;
@@ -26,13 +25,23 @@ contract OwnerBadge is ERC721, Ownable, ReentrancyGuard {
     }
 
     /// @dev owner Id => OwnerBadge
-    mapping (uint256 => OwnerBadge) public badges;
+    mapping(uint256 => OwnerBadge) public badges;
 
     constructor() ERC721("Owner Button Badge", "OBB") {}
 
-    function ownerBadgeMint(bytes32[] calldata _merkleProof, bytes32 _serialNumber) external payable nonReentrant {
+    function ownerBadgeMint(
+        bytes32[] calldata _merkleProof,
+        bytes32 _serialNumber
+    ) external payable nonReentrant {
         require(isActive, "OwnerButtonBadge: Sale is not active");
-        require(MerkleProof.verify(_merkleProof, merkleRoot,  keccak256(abi.encodePacked(_serialNumber))), "OwnerButtonBadge: Invalid Merkle Proof");
+        require(
+            MerkleProof.verify(
+                _merkleProof,
+                merkleRoot,
+                keccak256(abi.encodePacked(_serialNumber))
+            ),
+            "OwnerButtonBadge: Invalid Merkle Proof"
+        );
         _minter(msg.sender);
     }
 
@@ -57,12 +66,9 @@ contract OwnerBadge is ERC721, Ownable, ReentrancyGuard {
         merkleRoot = _merkleRoot;
     }
 
-    function FriendBadgeTokenURI(uint256 _ownerBadgeIds) public view returns (string memory) {
-        return string(
-            abi.encodePacked(
-                badges[_ownerBadgeIds].baseURI
-            )
-        );
+    function FriendBadgeTokenURI(
+        uint256 _ownerBadgeIds
+    ) public view returns (string memory) {
+        return string(abi.encodePacked(badges[_ownerBadgeIds].baseURI));
     }
-
 }

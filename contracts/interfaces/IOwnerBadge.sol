@@ -2,7 +2,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.18;
 
-interface IOwnerBadge {
+import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
+
+interface IOwnerBadge is IERC721{
     function ownerBadgeMint(bytes32[] calldata _merkleProof, bytes32 _serialNumber) external payable;
     function ownerBadgeExists(uint256 _tokenId) external view returns (bool);
     function setIsActive(bool _isActive) external;
