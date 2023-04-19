@@ -70,8 +70,8 @@ contract FriendBadgeMock is ERC721, Ownable, ReentrancyGuard {
             "FriendBadge: Max supply reached"
         );
         require(
-            ownerBadge.ownerOf(_ownerBadgeId) == msg.sender,
-            "FriendBadge: Not owner of owner badge"
+            ownerBadge.ownerOf(_ownerBadgeId) != msg.sender,
+            "FriendBadge: Cannot mint your own badge"
         );
 
         _safeMint(msg.sender, totalSupply);
