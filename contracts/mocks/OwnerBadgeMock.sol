@@ -27,7 +27,7 @@ contract OwnerBadgeMock is ERC721, Ownable, ReentrancyGuard {
     /// @dev owner Id => OwnerBadge
     mapping(uint256 => OwnerBadge) public badges;
 
-    constructor() ERC721("Owner Button Badge", "OBB") {}
+    constructor() ERC721("Owner Badge Mock", "OBM") {}
 
     function ownerBadgeMint(
         bytes32[] calldata _merkleProof,

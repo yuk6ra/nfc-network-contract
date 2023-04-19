@@ -33,7 +33,7 @@ contract FriendBadgeMock is ERC721, Ownable, ReentrancyGuard{
 
     constructor(
         address _ownerBadge
-    ) ERC721("Friend Badge", "FB") {
+    ) ERC721("Friend Badge Mock", "FBM") {
         ownerBadge = IOwnerBadge(_ownerBadge);
     }
 
@@ -66,7 +66,7 @@ contract FriendBadgeMock is ERC721, Ownable, ReentrancyGuard{
 
         return string(
             abi.encodePacked(
-                ownerBadge.FriendBadgeTokenURI(ownerBadgeId)
+                friendBadges[ownerBadgeId].metadataURI
             )
         );
     }
