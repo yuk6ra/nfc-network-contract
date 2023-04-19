@@ -73,7 +73,7 @@ contract OwnerGoods is ERC721, Ownable, ReentrancyGuard{
     
     function setIsActive(bool _isActive) external onlyOwner {
         isActive = _isActive;
-    } 
+    }
 
     function setERC20Token(address _tokenAddress, bool _isAllowed) external onlyOwner {
         isAllowedERC20Token[_tokenAddress] = _isAllowed;
