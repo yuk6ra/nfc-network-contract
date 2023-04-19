@@ -25,6 +25,9 @@ contract OwnerBadgeMock is ERC721, Ownable, ReentrancyGuard {
     /// @dev owner Id => OwnerBadge
     mapping(uint256 => OwnerBadge) public ownerBadges;
 
+    /// @dev level => metadataURI
+    mapping (uint256 => string) public metadataURIs;
+
     constructor() ERC721("Owner Badge Mock", "OBM") {}
 
     function ownerBadgeMint(
@@ -40,7 +43,9 @@ contract OwnerBadgeMock is ERC721, Ownable, ReentrancyGuard {
             ),
             "OwnerButtonBadge: Invalid Merkle Proof"
         );
-        _minter(msg.sender);
+
+        _safeMint(msg.sender, totalSupply);
+        totalSupply++;
     }
 
     function tokenURI(uint256 _tokenId)
@@ -51,8 +56,8 @@ contract OwnerBadgeMock is ERC721, Ownable, ReentrancyGuard {
     {
         require(_exists(_tokenId), "ERC721Metadata: URI query for nonexistent token");
 
-        string memory baseURI = "/";
         uint256 level = getLevel(_tokenId);
+        string memory baseURI = metadataURIs[level];
 
         return
             string(
@@ -101,14 +106,20 @@ contract OwnerBadgeMock is ERC721, Ownable, ReentrancyGuard {
         ownerBadges[_ownerBadgeId].icon = _icon;
     }
 
+    
+    function setOwnerBadgeMetadataURI(
+        uint256[] calldata _level,
+        string[] calldata _metadataURIs
+    ) external onlyOwner {
+        require(_level.length == _metadataURIs.length, "OwnerBadge: _level and _metadataURIs length must be equal");
+
+        for (uint256 i = 0; i < _level.length; i++) {
+            metadataURIs[_level[i]] = _metadataURIs[i];
+        }
+    }    
 
     function ownerBadgeExists(uint256 _ownerBadgeId) public view returns (bool) {
         return _exists(_ownerBadgeId);
-    }
-
-    function _minter(address _to) internal {
-        _safeMint(_to, totalSupply);
-        totalSupply++;
     }
 
     function getMerkleRoot() public view returns (bytes32) {
