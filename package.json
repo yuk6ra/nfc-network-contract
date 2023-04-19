@@ -15,6 +15,7 @@
     "hardhat-gas-reporter": "^1.0.9"
   },
   "dependencies": {
+    "@nomiclabs/hardhat-etherscan": "^3.1.7",
     "@openzeppelin/contracts": "^4.8.3",
     "dotenv": "^16.0.3",
     "keccak256": "^1.0.6",
