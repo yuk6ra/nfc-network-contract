@@ -5,9 +5,14 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
+import "@openzeppelin/contracts/utils/Strings.sol";
 import "../interfaces/IFriendBadge.sol";
 
 contract OwnerBadgeMock is ERC721, Ownable, ReentrancyGuard {
+
+    using Strings for uint256;
+
+
     uint256 public totalSupply;
 
     bytes32 public merkleRoot;
@@ -33,7 +38,7 @@ contract OwnerBadgeMock is ERC721, Ownable, ReentrancyGuard {
     function ownerBadgeMint(
         bytes32[] calldata _merkleProof,
         bytes32 _serialNumber
-    ) external payable nonReentrant {
+    ) external nonReentrant {
         require(isActive, "OwnerButtonBadge: Sale is not active");
         require(
             MerkleProof.verify(
@@ -62,7 +67,7 @@ contract OwnerBadgeMock is ERC721, Ownable, ReentrancyGuard {
         return
             string(
                 abi.encodePacked(
-                    baseURI, level
+                    baseURI, level.toString()
                 )
             );
     }
@@ -88,21 +93,21 @@ contract OwnerBadgeMock is ERC721, Ownable, ReentrancyGuard {
     /// @dev level >= 1
     function setUsername(uint256 _ownerBadgeId, string calldata _username) external onlyOwnerBadge(_ownerBadgeId) {
         require(ownerBadgeExists(_ownerBadgeId), "OwnerBadge: Owner Badge does not exist");
-        require(getLevel(_ownerBadgeId) >= 1, "OwnerBadge: Level is not enough");
+        require(getLevel(_ownerBadgeId) >= 2, "OwnerBadge: Level is not enough");
         ownerBadges[_ownerBadgeId].username = _username;
     }
 
     /// @dev level >= 2
     function setLink(uint256 _ownerBadgeId, string calldata _link) external onlyOwnerBadge(_ownerBadgeId) {
         require(ownerBadgeExists(_ownerBadgeId), "OwnerBadge: Owner Badge does not exist");
-        require(getLevel(_ownerBadgeId) >= 2, "OwnerBadge: Level is not enough");
+        require(getLevel(_ownerBadgeId) >= 3, "OwnerBadge: Level is not enough");
         ownerBadges[_ownerBadgeId].link = _link;
     }
 
     /// @dev level >= 1
     function setIcon(uint256 _ownerBadgeId, string calldata _icon) external onlyOwnerBadge(_ownerBadgeId) {
         require(ownerBadgeExists(_ownerBadgeId), "OwnerBadge: Owner Badge does not exist");
-        require(getLevel(_ownerBadgeId) >= 3, "OwnerBadge: Level is not enough");
+        require(getLevel(_ownerBadgeId) >= 4, "OwnerBadge: Level is not enough");
         ownerBadges[_ownerBadgeId].icon = _icon;
     }
 

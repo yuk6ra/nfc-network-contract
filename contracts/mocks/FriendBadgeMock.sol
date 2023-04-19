@@ -30,10 +30,9 @@ contract FriendBadgeMock is ERC721, Ownable, ReentrancyGuard {
     mapping (uint256 => FriendBadge) public friendBadges;
 
     /// @dev owner badge id => msg.sender => is minted
-    mapping (uint256 => mapping(address => bool)) public isMinted;
-
     mapping (uint256 => string) public metadataURIs;
 
+    mapping (bytes32 => bool) public isMinted;
 
     constructor(
         address _ownerBadge
@@ -47,16 +46,17 @@ contract FriendBadgeMock is ERC721, Ownable, ReentrancyGuard {
         bytes32 _serialNumber
     ) external nonReentrant {
         require(ownerBadge.ownerBadgeExists(_ownerBadgeId), "FriendBadge: Owner Badge does not exist");
-        require(!isMinted[_ownerBadgeId][msg.sender], "FriendBadge: Already minted");
+        require(!isMinted[_serialNumber], "FriendBadge: Already minted");
         require(MerkleProof.verify(_merkleProof, ownerBadge.getMerkleRoot(),  keccak256(abi.encodePacked(_serialNumber))), "FriendBadge: Invalid Merkle Proof");
-        require(friendBadges[_ownerBadgeId].totalSupply < friendBadges[_ownerBadgeId].maxSupply || friendBadges[_ownerBadgeId].maxSupply == 0, "FriendBadge: Max supply reached");
+
+        require(friendBadges[_ownerBadgeId].totalSupply <= friendBadges[_ownerBadgeId].maxSupply || friendBadges[_ownerBadgeId].maxSupply == 0, "FriendBadge: Max supply reached");
 
 
         _safeMint(msg.sender, totalSupply);
 
         ownerBadgeIds[totalSupply] = _ownerBadgeId;
         friendBadges[_ownerBadgeId].totalSupply++;
-        isMinted[_ownerBadgeId][msg.sender] = true;
+        isMinted[_serialNumber] = true;
         totalSupply++;
     }
 
