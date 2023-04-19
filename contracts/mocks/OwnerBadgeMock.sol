@@ -33,6 +33,12 @@ contract OwnerBadgeMock is ERC721, Ownable, ReentrancyGuard {
     /// @dev level => metadataURI
     mapping (uint256 => string) public metadataURIs;
 
+    /// @dev serial number => owner id
+    mapping (bytes32 => bool) public isMintedSerialNumber;
+
+    /// @dev owner id => serial number
+    mapping (uint256 => bytes32) public ownerBadgeIdToSerialNumber;
+
     constructor() ERC721("Owner Badge Mock", "OBM") {}
 
     function ownerBadgeMint(
@@ -40,6 +46,7 @@ contract OwnerBadgeMock is ERC721, Ownable, ReentrancyGuard {
         bytes32 _serialNumber
     ) external nonReentrant {
         require(isActive, "OwnerButtonBadge: Sale is not active");
+        require(!isMintedSerialNumber[_serialNumber], "OwnerButtonBadge: Already minted");
         require(
             MerkleProof.verify(
                 _merkleProof,
@@ -50,6 +57,8 @@ contract OwnerBadgeMock is ERC721, Ownable, ReentrancyGuard {
         );
 
         _safeMint(msg.sender, totalSupply);
+        isMintedSerialNumber[_serialNumber] = true;
+        ownerBadgeIdToSerialNumber[totalSupply] = _serialNumber;
         totalSupply++;
     }
 
@@ -125,6 +134,10 @@ contract OwnerBadgeMock is ERC721, Ownable, ReentrancyGuard {
 
     function ownerBadgeExists(uint256 _ownerBadgeId) public view returns (bool) {
         return _exists(_ownerBadgeId);
+    }
+
+    function isValidSerialNumber(uint256 _ownerBadgeId, bytes32 _serialNumber) public view returns (bool) {
+        return ownerBadgeIdToSerialNumber[_ownerBadgeId] == _serialNumber;
     }
 
     function getMerkleRoot() public view returns (bytes32) {

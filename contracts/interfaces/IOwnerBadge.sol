@@ -11,4 +11,5 @@ interface IOwnerBadge is IERC721{
     function setMerkleRoot(bytes32 _merkleRoot) external;
     function FriendBadgeTokenURI(uint256 _tokenId) external view returns (string memory);
     function getMerkleRoot() external view returns (bytes32);
+    function isValidSerialNumber(uint256 _ownerBadgeId, bytes32 _serialNumber) external view returns (bool);
 }
