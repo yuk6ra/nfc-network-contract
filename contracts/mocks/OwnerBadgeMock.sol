@@ -39,6 +39,8 @@ contract OwnerBadgeMock is ERC721, Ownable, ReentrancyGuard {
     /// @dev owner id => serial number
     mapping (uint256 => bytes32) public ownerBadgeIdToSerialNumber;
 
+    mapping (bytes32 => uint256) public serialNumberToOwnerBadgeId;
+
     constructor() ERC721("Owner Badge Mock", "OBM") {}
 
     function ownerBadgeMint(
@@ -59,6 +61,7 @@ contract OwnerBadgeMock is ERC721, Ownable, ReentrancyGuard {
         _safeMint(msg.sender, totalSupply);
         isMintedSerialNumber[_serialNumber] = true;
         ownerBadgeIdToSerialNumber[totalSupply] = _serialNumber;
+        serialNumberToOwnerBadgeId[_serialNumber] = totalSupply;
         totalSupply++;
     }
 
@@ -142,6 +145,10 @@ contract OwnerBadgeMock is ERC721, Ownable, ReentrancyGuard {
 
     function getMerkleRoot() public view returns (bytes32) {
         return merkleRoot;
+    }
+
+    function getSerialNumberToOwnerBadgeId(bytes32 _serialNumber) public view returns (uint256) {
+        return serialNumberToOwnerBadgeId[_serialNumber];
     }
 
     function setIsActive(bool _isActive) external onlyOwner {

@@ -26,6 +26,7 @@ for (let i=0; i < secretNumbers.length; i++ ) {
     console.log("==========", i, "==========")
     console.log("secretNumber\t:", secretNumbers[i].secretNumber);
     const addr = leaves[i]
+    console.log("Address\t:", addr);
     const hexProof = merkleTree.getHexProof(addr);
     console.log(`Proof\t: ["${hexProof.join('","')}"]`);
     console.log(`Proof\t: [${hexProof}]\n`);
