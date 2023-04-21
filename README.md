@@ -3,6 +3,15 @@
 ## Introduction
 NFC.Network is a new communication tool that incorporates NFC technology into character can badges, functioning as a "NFC character badge social graph." The owner of the badge (owner) issues the first character NFT, and at the same time, develops a smart contract that allows the distribution of friends NFTs (NFTs that can be distributed to people the owner meets) linked to the NFT at the time of issuance to people they meet while carrying the badge. The badge owner can sell or exchange friends NFTs with any token (including USDC or tokens issued by corporations in the future) and set distribution conditions. By embedding unique NFCs in goods and regularly promoting off-chain signature activities, as well as promoting communication between companies and fans in real venues even after purchase, the badge becomes a hub for strengthening relationships between people.
 
+## Deployed Contracts
+Network: Matic Mumbai Testnet
+
+1. [OwnerBadgeMock](https://mumbai.polygonscan.com/address/0xf43d3BA6474E242FdAD884CfbB847F5cfE5e9fba#code)
+
+2. [FriendBadgeMock](https://mumbai.polygonscan.com/address/0x075CD22eDE6e5ec37d075FE73dd3C177721d5Bb6#code)
+
+*No testing has been done. Security is not guaranteed.
+
 ## Sample secretNumber
 
 ```
